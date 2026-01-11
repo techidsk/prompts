@@ -1,0 +1,179 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: "Geist", system-ui, sans-serif;
+  background: linear-gradient(135deg, #09090b 0%, #18181b 50%, #1a1a1f 100%);
+  min-height: 100vh;
+}
+
+/* 自定义滚动条 */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #3f3f46;
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #52525b;
+}
+
+/* Markdown 样式 */
+.markdown-content {
+  @apply text-surface-200 leading-relaxed;
+}
+
+.markdown-content h1,
+.markdown-content h2,
+.markdown-content h3 {
+  @apply font-semibold text-white mt-4 mb-2;
+}
+
+.markdown-content h1 {
+  @apply text-xl;
+}
+
+.markdown-content h2 {
+  @apply text-lg;
+}
+
+.markdown-content h3 {
+  @apply text-base;
+}
+
+.markdown-content p {
+  @apply mb-3;
+}
+
+.markdown-content ul,
+.markdown-content ol {
+  @apply pl-5 mb-3;
+}
+
+.markdown-content li {
+  @apply mb-1;
+}
+
+.markdown-content code {
+  @apply bg-surface-800 px-1.5 py-0.5 rounded text-accent-light font-mono text-sm;
+}
+
+.markdown-content pre {
+  @apply bg-surface-900 p-4 rounded-lg overflow-x-auto mb-3;
+}
+
+.markdown-content pre code {
+  @apply bg-transparent p-0;
+}
+
+.markdown-content blockquote {
+  @apply border-l-2 border-accent pl-4 italic text-surface-400 my-3;
+}
+
+.markdown-content a {
+  @apply text-accent hover:text-accent-light underline;
+}
+
+.markdown-content table {
+  @apply w-full border-collapse mb-3;
+}
+
+.markdown-content th,
+.markdown-content td {
+  @apply border border-surface-700 px-3 py-2 text-left;
+}
+
+.markdown-content th {
+  @apply bg-surface-800 font-semibold;
+}
+
+/* 打字机光标动画 */
+@keyframes blink {
+  0%,
+  50% {
+    opacity: 1;
+  }
+  51%,
+  100% {
+    opacity: 0;
+  }
+}
+
+.typing-cursor::after {
+  content: "▋";
+  animation: blink 1s infinite;
+  color: #f97316;
+}
+
+/* 图片上传动画 */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.image-preview-enter {
+  animation: fadeIn 0.2s ease-out;
+}
+
+/* 拖拽区域动画 */
+@keyframes pulse-border {
+  0%, 100% {
+    border-color: #f97316;
+  }
+  50% {
+    border-color: #fb923c;
+  }
+}
+
+.drag-active {
+  animation: pulse-border 1s ease-in-out infinite;
+}
+
+/* 灯箱动画 */
+@keyframes fadeInLightbox {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes scaleIn {
+  from {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.lightbox-overlay {
+  animation: fadeInLightbox 0.2s ease-out;
+}
+
+.lightbox-image {
+  animation: scaleIn 0.2s ease-out;
+}
