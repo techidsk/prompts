@@ -247,7 +247,7 @@ export default function ChatArea({
 
   return (
     <div
-      className="flex-1 flex flex-col relative"
+      className="flex-1 flex flex-col relative overflow-hidden"
       onDragOver={handleDragOver}
       onDragLeave={handleDragLeave}
       onDrop={handleDrop}
@@ -266,7 +266,7 @@ export default function ChatArea({
       )}
 
       {/* 消息列表 */}
-      <div className="flex-1 overflow-y-auto">
+      <div className="flex-1 overflow-y-auto min-h-0">
         {messages.length === 0 ? (
           <div className="h-full flex items-center justify-center">
             <div className="text-center max-w-lg px-6">

@@ -7,6 +7,13 @@ import { createOpenAI } from "@ai-sdk/openai";
 import { streamText } from "ai";
 import { readdir, readFile } from "fs/promises";
 import { join } from "path";
+import {
+  saveChatRecord,
+  getChatRecords,
+  getChatRecord,
+  deleteChatRecord,
+  getChatRecordCount,
+} from "./db";
 
 const app = new Hono();
 
@@ -176,6 +183,74 @@ app.get("/api/health", (c) => {
     status: "ok",
     hasApiKey: !!process.env.OPENROUTER_API_KEY,
   });
+});
+
+// 保存聊天记录
+app.post("/api/history", async (c) => {
+  try {
+    const body = await c.req.json();
+    const { prompt_id, prompt_name, model_id, model_name, user_message, assistant_message, has_images } = body;
+    
+    const id = saveChatRecord({
+      prompt_id,
+      prompt_name,
+      model_id,
+      model_name,
+      user_message,
+      assistant_message,
+      has_images: has_images ? 1 : 0,
+    });
+    
+    return c.json({ id, success: true });
+  } catch (error) {
+    console.error("Save history error:", error);
+    return c.json({ error: "Failed to save history" }, 500);
+  }
+});
+
+// 获取聊天记录列表
+app.get("/api/history", (c) => {
+  try {
+    const limit = parseInt(c.req.query("limit") || "50");
+    const offset = parseInt(c.req.query("offset") || "0");
+    
+    const records = getChatRecords(limit, offset);
+    const total = getChatRecordCount();
+    
+    return c.json({ records, total });
+  } catch (error) {
+    console.error("Get history error:", error);
+    return c.json({ error: "Failed to get history" }, 500);
+  }
+});
+
+// 获取单条记录
+app.get("/api/history/:id", (c) => {
+  try {
+    const id = parseInt(c.req.param("id"));
+    const record = getChatRecord(id);
+    
+    if (!record) {
+      return c.json({ error: "Record not found" }, 404);
+    }
+    
+    return c.json(record);
+  } catch (error) {
+    console.error("Get history record error:", error);
+    return c.json({ error: "Failed to get record" }, 500);
+  }
+});
+
+// 删除记录
+app.delete("/api/history/:id", (c) => {
+  try {
+    const id = parseInt(c.req.param("id"));
+    deleteChatRecord(id);
+    return c.json({ success: true });
+  } catch (error) {
+    console.error("Delete history error:", error);
+    return c.json({ error: "Failed to delete record" }, 500);
+  }
 });
 
 const port = 9988;
